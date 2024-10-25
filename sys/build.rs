@@ -1,6 +1,8 @@
 use cmake::Config;
 use glob::glob;
+use std::borrow::Cow;
 use std::env;
+use std::ffi::OsStr;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -310,6 +312,7 @@ fn rerun_on_env_changes(vars: &[&str]) {
 }
 
 fn main() {
+    println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed=wrapper.h");
     println!("cargo:rerun-if-changed=./sherpa-onnx");
     println!("cargo:rerun-if-changed=dist.txt");
@@ -357,7 +360,14 @@ fn main() {
     is_dynamic = std::env::var("SHERPA_BUILD_SHARED_LIBS")
         .map(|v| v == "1")
         .unwrap_or(is_dynamic);
-    let profile = env::var("SHERPA_LIB_PROFILE").unwrap_or("Release".to_string());
+    let profile = env::var("SHERPA_LIB_PROFILE").unwrap_or_else(|_| {
+        if env::var("PROFILE").as_deref() == Ok("debug") {
+            "Debug"
+        } else {
+            "Release"
+        }
+        .to_string()
+    });
     let static_crt = env::var("SHERPA_STATIC_CRT")
         .map(|v| v == "1")
         .unwrap_or(true);
