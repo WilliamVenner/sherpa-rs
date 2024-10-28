@@ -170,6 +170,12 @@ impl Diarize {
                                 sherpa_rs_sys::SherpaOnnxOfflineSpeakerDiarizationResultFreeSpeakerEmbeddings(
                                     speaker_embeddings,
                                 );
+                            } else {
+                                debug_assert!(
+                                    false,
+                                    "Speaker embeddings not found for speaker {}",
+                                    segment.speaker
+                                );
                             }
                         }
                     }
