@@ -1,8 +1,8 @@
-use std::ffi::CString;
+use std::ffi::{c_char, CString};
 
 // Smart pointer for CString
 pub struct RawCStr {
-    ptr: *mut i8,
+    ptr: *mut c_char,
 }
 
 impl RawCStr {
@@ -19,7 +19,7 @@ impl RawCStr {
     /// This function only returns the raw pointer and does not transfer ownership.
     /// The pointer remains valid as long as the `CStr` instance exists.
     /// Be cautious not to deallocate or modify the pointer after using `CStr::new`.
-    pub fn as_ptr(&self) -> *const i8 {
+    pub fn as_ptr(&self) -> *const c_char {
         self.ptr
     }
 }
@@ -34,7 +34,7 @@ impl Drop for RawCStr {
     }
 }
 
-pub fn cstr_to_string(ptr: *const i8) -> String {
+pub fn cstr_to_string(ptr: *const c_char) -> String {
     unsafe {
         if ptr.is_null() {
             String::new()
