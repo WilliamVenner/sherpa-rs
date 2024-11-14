@@ -170,8 +170,12 @@ fn extract_tbz(buf: &[u8], output: &Path) {
 }
 
 fn hard_link(src: PathBuf, dst: PathBuf) {
-    if let Ok(link_src) = fs::read_link(&src) {
-        debug_log!("Found symlink at {src:?} pointing to {link_src:?}, copying to {dst:?} instead");
+    if let Ok(mut link_src) = fs::read_link(&src) {
+        if !link_src.is_absolute() {
+            link_src = src.parent().unwrap().join(link_src);
+        }
+
+        debug_log!("Found symlink at {src:?} pointing to {link_src:?}");
         return hard_link(link_src, dst);
     }
 
