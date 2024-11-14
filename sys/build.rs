@@ -170,8 +170,9 @@ fn extract_tbz(buf: &[u8], output: &Path) {
 }
 
 fn hard_link(src: PathBuf, dst: PathBuf) {
-    if let Ok(src) = fs::read_link(&src) {
-        return hard_link(src, dst);
+    if let Ok(link_src) = fs::read_link(&src) {
+        debug_log!("Found symlink at {src:?} pointing to {link_src:?}, copying to {dst:?} instead");
+        return hard_link(link_src, dst);
     }
 
     if let Err(err) = std::fs::hard_link(&src, &dst) {
