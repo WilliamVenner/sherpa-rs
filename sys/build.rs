@@ -170,6 +170,10 @@ fn extract_tbz(buf: &[u8], output: &Path) {
 }
 
 fn hard_link(src: PathBuf, dst: PathBuf) {
+    if let Ok(src) = fs::read_link(&src) {
+        return hard_link(src, dst);
+    }
+
     if let Err(err) = std::fs::hard_link(&src, &dst) {
         debug_log!("Failed to hardlink {:?}. fallback to copy.", err);
         fs::copy(src, dst).unwrap();
