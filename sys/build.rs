@@ -270,7 +270,7 @@ fn extract_lib_assets(out_dir: &Path) -> Vec<PathBuf> {
     } else if cfg!(target_os = "macos") {
         "*.dylib"
     } else {
-        "*.so"
+        "*.so*"
     };
 
     let libs_dir = out_dir.join("lib");
