@@ -1,4 +1,4 @@
 [submodule "sys/sherpa-onnx"]
 	path = sys/sherpa-onnx
-	url = https://github.com/WilliamVenner/sherpa-onnx.git
+	url = https://github.com/patientprism/sherpa-onnx.git
 	branch = pp
